@@ -1,10 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Boot : MonoBehaviour
 {
     private void Start()
     {
-        GameManager.Instance.SetState(GameState.Boot);
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("GameManager not found in Boot scene!");
+            return;
+        }
         SceneLoader.Instance.GoToMenu();
     }
 }
