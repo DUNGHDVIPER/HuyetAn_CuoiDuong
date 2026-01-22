@@ -1,18 +1,57 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class NewBehaviourScript : MonoBehaviour
+public class PauseUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("Panels")]
+    public GameObject pausePanel;
+
+    private bool isPaused = false;
+
+    /* private void Start()
+     {
+         Resume(); // đảm bảo vào scene là chạy bình thường
+     }*/
+
+    private void Start()
     {
-        
+        isPaused = false;
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void TogglePause()
     {
-        
+        Debug.Log("[PauseUI] TogglePause clicked!");
+        if (isPaused) Resume();
+        else Pause();
+    }
+
+    public void Pause()
+    {
+        isPaused = true;
+        Time.timeScale = 0f;
+        if (pausePanel != null) pausePanel.SetActive(true);
+    }
+
+    public void Resume()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+        if (pausePanel != null) pausePanel.SetActive(false);
+    }
+
+    public void RestartStage()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void BackToMenu()
+    {
+        Time.timeScale = 1f;
+        if (GameManager.Instance != null) GameManager.Instance.GoMenu();
+        else SceneManager.LoadScene("01_Menu");
     }
 }
