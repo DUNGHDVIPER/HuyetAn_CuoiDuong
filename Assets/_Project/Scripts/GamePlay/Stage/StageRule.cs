@@ -53,4 +53,5 @@ public class StageRule : MonoBehaviour
         Debug.Log($"[StageRule] LOSE: {reason}");
         if (resultUI != null) resultUI.ShowLose();
     }
+
 }

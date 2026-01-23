@@ -532,6 +532,7 @@ GameObject:
   m_Component:
   - component: {fileID: 808971467}
   - component: {fileID: 808971466}
+  - component: {fileID: 808971468}
   m_Layer: 0
   m_Name: StageSelectController
   m_TagString: Untagged
@@ -567,6 +568,31 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &808971468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808971465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ed6c172aab642f4e85404d4e1052468, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: {fileID: 0}
+  btnStage1: {fileID: 395899615}
+  btnStage2: {fileID: 94572118}
+  btnStage3: {fileID: 2129806674}
+  btnBoss: {fileID: 911300865}
+  btnBack: {fileID: 972860218}
+  chapterMapScene: 02_ChapterMap
+  chapter1Scenes: []
+  chapter2Scenes: []
+  chapter3Scenes: []
+  chapter4Scenes: []
+  chapter5Scenes:
+  - CH5_S1
 --- !u!1 &896216248
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,15 +620,15 @@ RectTransform:
   m_GameObject: {fileID: 896216248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.04, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1729691516}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 63, y: 176}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -66.5, y: 175.11368}
+  m_SizeDelta: {x: 449.04, y: 48.2273}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &896216250
 MonoBehaviour:
@@ -624,7 +650,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ch1
+  m_text: "Ch\u01B0\u01A1ng 5 -K\u1EBB Th\xF9 Cu\u1ED1i"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
