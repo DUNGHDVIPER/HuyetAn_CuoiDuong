@@ -129,7 +129,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using HACD; // nếu bạn dùng AppScenes
+using HACD; // nếu bạn dùng AppScenes (không có thì đổi chapterMapScene = "02_ChapterMap")
 
 public class StageSelectByChapterUI : MonoBehaviour
 {
@@ -157,41 +157,43 @@ public class StageSelectByChapterUI : MonoBehaviour
         "Chương 5 - Kẻ Thù Cuối"
     };
 
-    private const string KEY_SELECTED_CHAPTER = "SELECTED_CHAPTER";
-    private const string KEY_UNLOCKED_STAGE_PREFIX = "UNLOCKED_STAGE_CH"; // + chapter => 1..4
+    const string KEY_SELECTED_CHAPTER = "SELECTED_CHAPTER";
+    const string KEY_UNLOCKED_STAGE_PREFIX = "UNLOCKED_STAGE_CH"; // + chapter => 1..4
 
     void Awake()
     {
-        // LOG NGAY TỪ AWAKE để bắt “đứa nào ghi đè”
         Debug.Log($"[StageSelect][Awake] SELECTED_CHAPTER = {PlayerPrefs.GetInt(KEY_SELECTED_CHAPTER, -999)}");
     }
 
     void Start()
     {
+        // ✅ bắt lỗi gán thiếu reference (đây là lỗi bạn đang gặp)
+        if (!btnStage1 || !btnStage2 || !btnStage3 || !btnBoss)
+        {
+            Debug.LogError("[StageSelect] Bạn CHƯA kéo Btn_S1/Btn_S2/Btn_S3/Btn_Boss vào Inspector của StageSelectController.");
+            return;
+        }
+
         int chapter = PlayerPrefs.GetInt(KEY_SELECTED_CHAPTER, 1);
         Debug.Log($"[StageSelect][Start] SELECTED_CHAPTER = {chapter}");
 
-        // set tiêu đề
         if (title != null)
         {
-            string t = (chapter >= 1 && chapter <= chapterTitles.Length)
+            title.text = (chapter >= 1 && chapter <= chapterTitles.Length)
                 ? chapterTitles[chapter - 1]
                 : $"Chương {chapter}";
-            title.text = t;
         }
-        if (subTitle != null) subTitle.text = "Chọn Huyết Ấn";
 
-        // lấy list scene theo chương
+        if (subTitle != null)
+            subTitle.text = "Chọn Huyết Ấn";
+
         var scenes = GetScenesByChapter(chapter);
-
-        // validate đủ 4 scene
         if (!IsValid4Scenes(scenes))
         {
             Debug.LogError($"[StageSelect] Chưa set đủ 4 scene cho CH{chapter} (S1,S2,S3,Boss).");
             return;
         }
 
-        // unlock theo tiến độ
         int unlockedStage = PlayerPrefs.GetInt(KEY_UNLOCKED_STAGE_PREFIX + chapter, 1);
 
         Setup(btnStage1, "Huyết Ấn I", unlockedStage >= 1, scenes[0], false);
@@ -212,18 +214,21 @@ public class StageSelectByChapterUI : MonoBehaviour
 
         btn.interactable = interactable;
 
-        // đổi text trên nút
-        var tmp = btn.GetComponentInChildren<TMP_Text>(true);
-        if (tmp) tmp.text = label;
-
-        // nếu có StageButtonUI thì set state
-        var fx = btn.GetComponent<StageButtonUI>();
+        // ✅ QUAN TRỌNG: set chữ bằng ChapterButtonFX (đúng cái LABEL bạn đã map)
+        var fx = btn.GetComponent<ChapterButtonFX>();
         if (fx != null)
         {
             fx.SetText(label);
-            if (!interactable) fx.SetState(StageButtonUI.State.Locked);
-            else if (isBoss) fx.SetState(StageButtonUI.State.Boss);
-            else fx.SetState(StageButtonUI.State.Unlocked);
+
+            if (!interactable) fx.SetState(ChapterButtonFX.State.Locked);
+            else if (isBoss) fx.SetState(ChapterButtonFX.State.Boss);
+            else fx.SetState(ChapterButtonFX.State.Unlocked);
+        }
+        else
+        {
+            // fallback nếu thiếu fx
+            var tmp = btn.GetComponentInChildren<TMP_Text>(true);
+            if (tmp) tmp.text = label;
         }
 
         btn.onClick.RemoveAllListeners();
@@ -258,4 +263,13 @@ public class StageSelectByChapterUI : MonoBehaviour
             _ => chapter1Scenes
         };
     }
+
+    public void DevUnlockAllStagesThisChapter()
+    {
+        int chapter = PlayerPrefs.GetInt(KEY_SELECTED_CHAPTER, 1);
+        PlayerPrefs.SetInt(KEY_UNLOCKED_STAGE_PREFIX + chapter, 4);
+        PlayerPrefs.Save();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }
+    

@@ -135,7 +135,9 @@ public class ChapterSelectUI : MonoBehaviour
     {
         if (chapterButtons == null || chapterButtons.Length == 0) return;
 
-        int unlockedChapter = PlayerPrefs.GetInt(KEY_UNLOCKED_CHAPTER, defaultUnlockedChapter);
+        //int unlockedChapter = PlayerPrefs.GetInt(KEY_UNLOCKED_CHAPTER, defaultUnlockedChapter);
+        int unlockedChapter = 5; // 🔥 MỞ CỨNG 5 CHƯƠNG
+
 
         for (int i = 0; i < chapterButtons.Length; i++)
         {
