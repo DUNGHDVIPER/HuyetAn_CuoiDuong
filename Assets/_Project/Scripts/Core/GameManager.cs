@@ -1,80 +1,13 @@
-﻿/*using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using HACD;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
     [Header("State")]
-    public GameState CurrentState = GameState.Boot;
-
-    [Header("Save Slot")]
-    public int currentSlot = 1;
-
-    [Header("Progress")]
-    public int currentChapter = 1;
-    public string currentStageScene = "Main"; // tạm thời
-
-    private void Awake()
-    {
-        // Singleton
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    public void SetState(GameState newState)
-    {
-        CurrentState = newState;
-        Debug.Log($"[GameManager] State -> {newState}");
-    }
-    public void GoChapterMap()
-    {
-        SceneManager.LoadScene(SceneName.ChapterMap);
-    }
-
-    public void GoStageSelect()
-    {
-        SceneManager.LoadScene(SceneName.StageSelect);
-    }
-
-    public void LoadStage(string stageSceneName)
-    {
-        currentStageScene = stageSceneName;
-        SceneManager.LoadScene(SceneName.Loading);
-    }
-    public void GoBoot()
-    {
-        SceneManager.LoadScene(SceneName.Boot);
-    }
-
-    public void GoMenu()
-    {
-        SceneManager.LoadScene(SceneName.Menu);
-    }
-
-    // nếu bạn đang gọi GoToMenu ở chỗ nào đó:
-    public void GoToMenu()
-    {
-        GoMenu();
-    }
-}
-*/
-
-using UnityEngine;
-using UnityEngine.SceneManagement;
-
-public class GameManager : MonoBehaviour
-{
-    public static GameManager Instance { get; private set; }
-
-    [Header("State")]
-    public GameState CurrentState = GameState.Boot;
+    public AppGameState CurrentState = AppGameState.Boot;
 
     [Header("Save Slot")]
     public int currentSlot = 1;
@@ -82,8 +15,8 @@ public class GameManager : MonoBehaviour
     [Header("Progress")]
     public int currentChapter = 1;
 
-    // IMPORTANT: scene này phải tồn tại trong Build Settings nếu bạn muốn load thật
-    public string currentStageScene = "Main"; // tạm test
+    // stage scene sẽ load sau Loading
+    public string currentStageScene = "";
 
     private void Awake()
     {
@@ -97,25 +30,31 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void SetState(GameState newState)
+    public void SetState(AppGameState newState)
     {
         CurrentState = newState;
         Debug.Log($"[GameManager] State -> {newState}");
     }
 
-    public void GoChapterMap() => SceneManager.LoadScene(SceneName.ChapterMap);
+    // Điều hướng scene theo AppScenes
+    public void GoChapterMap() => SceneManager.LoadScene(AppScenes.ChapterMap);
+    public void GoStageSelect() => SceneManager.LoadScene(AppScenes.StageSelect);
+    public void GoBoot() => SceneManager.LoadScene(AppScenes.Boot);
+    public void GoMenu() => SceneManager.LoadScene(AppScenes.Menu);
 
-    public void GoStageSelect() => SceneManager.LoadScene(SceneName.StageSelect);
-
+    /// <summary>
+    /// StageSelect gọi hàm này -> set stage -> vào Loading
+    /// </summary>
     public void LoadStage(string stageSceneName)
     {
         currentStageScene = stageSceneName;
-        SceneManager.LoadScene(SceneName.Loading);
+        SetState(AppGameState.Loading);
+        SceneManager.LoadScene(AppScenes.Loading);
     }
 
-    public void GoBoot() => SceneManager.LoadScene(SceneName.Boot);
-
-    public void GoMenu() => SceneManager.LoadScene(SceneName.Menu);
-
-    public void GoToMenu() => GoMenu(); // alias
+    public void SetStage(string sceneName)
+    {
+        currentStageScene = sceneName;
+        Debug.Log($"[GameManager] SetStage = {currentStageScene}");
+    }
 }

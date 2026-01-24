@@ -1,4 +1,4 @@
-public enum GameState
+/*public enum GameState
 {
     Boot,
     Menu,
@@ -6,3 +6,4 @@ public enum GameState
     Playing,
     Paused
 }
+*/
