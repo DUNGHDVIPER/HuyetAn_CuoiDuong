@@ -2,7 +2,11 @@ fileFormatVersion: 2
 guid: 43b0a4f070427a94c9348028c1468ab5
 NativeFormatImporter:
   externalObjects: {}
+<<<<<<< HEAD
   mainObjectFileID: 9100000
+=======
+  mainObjectFileID: 0
+>>>>>>> 3c0bd35 (Restore player sprites and project layers from main)
   userData: 
   assetBundleName: 
   assetBundleVariant: 

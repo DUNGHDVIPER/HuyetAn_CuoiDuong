@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!74 &7400000
+AnimationClip:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: attacking
+  serializedVersion: 7
+  m_Legacy: 0
+  m_Compressed: 0
+  m_UseHighQualityCurve: 1
+  m_RotationCurves: []
+  m_CompressedRotationCurves: []
+  m_EulerCurves: []
+  m_PositionCurves: []
+  m_ScaleCurves: []
+  m_FloatCurves: []
+  m_PPtrCurves:
+  - serializedVersion: 2
+    curve:
+    - time: 0
+      value: {fileID: 21300000, guid: b528fa7cca9c0514ea4867f30c31841e, type: 3}
+    - time: 0.02
+      value: {fileID: 21300000, guid: b528fa7cca9c0514ea4867f30c31841e, type: 3}
+    - time: 0.04
+      value: {fileID: 21300000, guid: 73a75f91b8229964f98588595efc1a50, type: 3}
+    - time: 0.06
+      value: {fileID: 21300000, guid: cbdf1fe2110c8f04a8a89ba775e68610, type: 3}
+    - time: 0.08
+      value: {fileID: 21300000, guid: 572743e25b0b9934c8e05162f769d97c, type: 3}
+    - time: 0.1
+      value: {fileID: 21300000, guid: 14bf333727146814b950e0bee146873e, type: 3}
+    - time: 0.12
+      value: {fileID: 21300000, guid: 14f4c4feba9034248aaa20ea14f4d724, type: 3}
+    - time: 0.14
+      value: {fileID: 21300000, guid: 8fb17cb017b100d4d8131ec4d09992ef, type: 3}
+    - time: 0.16
+      value: {fileID: 21300000, guid: 93cf0b31c2253414ebbd6ea8cfc3a5f7, type: 3}
+    - time: 0.18
+      value: {fileID: 21300000, guid: 8e136155772e5f043ba03880248cd48f, type: 3}
+    - time: 0.2
+      value: {fileID: 21300000, guid: 8c803538b52218543b5431398a2db2ab, type: 3}
+    - time: 0.22
+      value: {fileID: 21300000, guid: baa63d952b9b3334494f460fcc8cbcde, type: 3}
+    - time: 0.24
+      value: {fileID: 21300000, guid: 6733ae78749e6f14bab45fc49fa3b54a, type: 3}
+    attribute: m_Sprite
+    path: 
+    classID: 212
+    script: {fileID: 0}
+    flags: 2
+  m_SampleRate: 50
+  m_WrapMode: 0
+  m_Bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_ClipBindingConstant:
+    genericBindings:
+    - serializedVersion: 2
+      path: 0
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    pptrCurveMapping:
+    - {fileID: 21300000, guid: b528fa7cca9c0514ea4867f30c31841e, type: 3}
+    - {fileID: 21300000, guid: b528fa7cca9c0514ea4867f30c31841e, type: 3}
+    - {fileID: 21300000, guid: 73a75f91b8229964f98588595efc1a50, type: 3}
+    - {fileID: 21300000, guid: cbdf1fe2110c8f04a8a89ba775e68610, type: 3}
+    - {fileID: 21300000, guid: 572743e25b0b9934c8e05162f769d97c, type: 3}
+    - {fileID: 21300000, guid: 14bf333727146814b950e0bee146873e, type: 3}
+    - {fileID: 21300000, guid: 14f4c4feba9034248aaa20ea14f4d724, type: 3}
+    - {fileID: 21300000, guid: 8fb17cb017b100d4d8131ec4d09992ef, type: 3}
+    - {fileID: 21300000, guid: 93cf0b31c2253414ebbd6ea8cfc3a5f7, type: 3}
+    - {fileID: 21300000, guid: 8e136155772e5f043ba03880248cd48f, type: 3}
+    - {fileID: 21300000, guid: 8c803538b52218543b5431398a2db2ab, type: 3}
+    - {fileID: 21300000, guid: baa63d952b9b3334494f460fcc8cbcde, type: 3}
+    - {fileID: 21300000, guid: 6733ae78749e6f14bab45fc49fa3b54a, type: 3}
+  m_AnimationClipSettings:
+    serializedVersion: 2
+    m_AdditiveReferencePoseClip: {fileID: 0}
+    m_AdditiveReferencePoseTime: 0
+    m_StartTime: 0
+    m_StopTime: 0.26
+    m_OrientationOffsetY: 0
+    m_Level: 0
+    m_CycleOffset: 0
+    m_HasAdditiveReferencePose: 0
+    m_LoopTime: 0
+    m_LoopBlend: 0
+    m_LoopBlendOrientation: 0
+    m_LoopBlendPositionY: 0
+    m_LoopBlendPositionXZ: 0
+    m_KeepOriginalOrientation: 0
+    m_KeepOriginalPositionY: 1
+    m_KeepOriginalPositionXZ: 0
+    m_HeightFromFeet: 0
+    m_Mirror: 0
+  m_EditorCurves: []
+  m_EulerEditorCurves: []
+  m_HasGenericRootTransform: 0
+  m_HasMotionFloatCurves: 0
+  m_Events:
+  - time: 0.1
+    functionName: AE_Attack_Hit
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.26
+    functionName: AE_Attack_End
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

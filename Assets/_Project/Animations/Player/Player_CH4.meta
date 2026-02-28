@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: e5b0efe7558e70948a8bead679dfbef1
+=======
+guid: 637cdf1d426adc04f9cc4f109344b158
+>>>>>>> 3c0bd35 (Restore player sprites and project layers from main)
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
