@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
+  - PlayerAttack
   layers:
   - Default
   - TransparentFX
@@ -11,9 +13,9 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - PlayerAttack
   - 
   - 
   - 
@@ -46,4 +48,19 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 704604139
+    locked: 0
+  - name: Enemy
+    uniqueID: 1700495823
+    locked: 0
+  - name: HP
+    uniqueID: 3151268669
+    locked: 0
+  - name: UI
+    uniqueID: 716743191
+    locked: 0
+  - name: PlayerAttack
+    uniqueID: 779209805
+    locked: 0
+  - name: Effect
+    uniqueID: 3309802705
     locked: 0
