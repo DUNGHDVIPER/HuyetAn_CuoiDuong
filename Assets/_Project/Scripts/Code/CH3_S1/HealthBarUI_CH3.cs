@@ -1,39 +1,25 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBarUI : MonoBehaviour
 {
-    public Slider slider;
-    public Image fillImage;
+    private Image fillImage;
+    private int maxHP;
 
-    public Color fullHPColor = Color.green;
-    public Color midHPColor = Color.yellow;
-    public Color lowHPColor = Color.red;
-
-    public void SetMaxHP(int maxHP)
+    void Awake()
     {
-        slider.maxValue = maxHP;
-        slider.value = maxHP;
-        UpdateColor();
+        fillImage = GetComponent<Image>(); // tự lấy Image
     }
 
-    public void SetHP(int hp)
+    public void SetMaxHP(int max)
     {
-        slider.value = hp;
-        UpdateColor();
+        maxHP = max;
     }
 
-    void UpdateColor()
+    public void SetHP(int currentHP)
     {
-        if (fillImage == null || slider.maxValue <= 0) return;
+        if (fillImage == null || maxHP <= 0) return;
 
-        float percent = slider.value / slider.maxValue;
-
-        if (percent > 0.6f)
-            fillImage.color = fullHPColor;
-        else if (percent > 0.3f)
-            fillImage.color = midHPColor;
-        else
-            fillImage.color = lowHPColor;
+        fillImage.fillAmount = (float)currentHP / maxHP;
     }
 }

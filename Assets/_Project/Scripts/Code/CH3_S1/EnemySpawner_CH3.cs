@@ -3,8 +3,8 @@ using System.Collections;
 
 public class EnemyTunnelSpawner : MonoBehaviour
 {
-    [Header("Enemy Prefabs (Many Types)")]
-    public GameObject[] enemyPrefabs;   // nhiều loại quái
+    [Header("Enemy Prefabs")]
+    public GameObject[] enemyPrefabs;
 
     [Header("Refs")]
     public Transform player;
@@ -16,11 +16,14 @@ public class EnemyTunnelSpawner : MonoBehaviour
     [Header("Spawn Settings")]
     public float spawnInterval = 3f;
     public int maxAlive = 5;
+    public int totalSpawnLimit = 10;   // 🔥 TỐI ĐA 10 CON
 
     [Header("Emerge")]
     public float emergeTime = 0.6f;
 
     private int alive = 0;
+    private int totalSpawned = 0;
+    private bool stopSpawning = false;
 
     void Start()
     {
@@ -29,11 +32,17 @@ public class EnemyTunnelSpawner : MonoBehaviour
 
     IEnumerator SpawnLoop()
     {
-        while (true)
+        while (!stopSpawning)
         {
-            if (alive < maxAlive)
+            if (alive < maxAlive && totalSpawned < totalSpawnLimit)
             {
                 SpawnOneFromRandomTunnel();
+            }
+
+            if (totalSpawned >= totalSpawnLimit)
+            {
+                stopSpawning = true;
+                Debug.Log("Spawn limit reached.");
             }
 
             yield return new WaitForSeconds(spawnInterval);
@@ -42,7 +51,7 @@ public class EnemyTunnelSpawner : MonoBehaviour
 
     void SpawnOneFromRandomTunnel()
     {
-        if (enemyPrefabs == null || enemyPrefabs.Length == 0) return;
+        if (enemyPrefabs.Length == 0) return;
         if (spawnInsidePoints.Length == 0 || exitMouthPoints.Length == 0) return;
 
         int tunnelIndex = Random.Range(0,
@@ -51,41 +60,48 @@ public class EnemyTunnelSpawner : MonoBehaviour
         Transform inside = spawnInsidePoints[tunnelIndex];
         Transform mouth = exitMouthPoints[tunnelIndex];
 
-        // 🔥 KIỂM TRA CÓ QUÁI GẦN ĐÓ KHÔNG
-        Collider2D hit = Physics2D.OverlapCircle(mouth.position, 1.2f, LayerMask.GetMask("Enemy"));
+        // Không spawn nếu có quái đứng ở miệng hầm
+        Collider2D hit = Physics2D.OverlapCircle(
+            mouth.position,
+            1.2f,
+            LayerMask.GetMask("Enemy")
+        );
+
         if (hit != null)
-        {
-            // Có quái đang đứng ở miệng hầm → không spawn
             return;
-        }
 
         int enemyIndex = Random.Range(0, enemyPrefabs.Length);
         GameObject prefabToSpawn = enemyPrefabs[enemyIndex];
 
         GameObject e = Instantiate(prefabToSpawn, inside.position, Quaternion.identity);
-        alive++;
 
+        alive++;
+        totalSpawned++;
+
+        // Gán player cho AI
         var ai = e.GetComponent<EnemyAI2D_CH3>();
         if (ai != null)
             ai.player = player;
 
-        var health = e.GetComponent<EnemyHealth1>();
-        if (health != null)
-            StartCoroutine(WatchEnemyDeath(e));
+        // Theo dõi chết
+        StartCoroutine(WatchEnemyDeath(e));
 
+        // Hiệu ứng chui lên
         StartCoroutine(EmergeRoutine(e, mouth.position));
     }
 
     IEnumerator WatchEnemyDeath(GameObject enemy)
     {
-        var health = enemy.GetComponent<EnemyHealth1>();
-
-        while (enemy != null && health != null && !health.IsDead)
+        while (enemy != null)
         {
+            var health = enemy.GetComponent<EnemyHealth1>();
+            if (health != null && health.IsDead)
+                break;
+
             yield return null;
         }
 
-        alive--;
+        alive = Mathf.Max(0, alive - 1);
     }
 
     IEnumerator EmergeRoutine(GameObject enemy, Vector3 targetPos)

@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class EnemyHealth1 : MonoBehaviour
-{
+{public HealthBarUI healthBar;
     public int maxHP = 10;
     public float destroyDelay = 0.8f;
 
@@ -13,7 +13,7 @@ public class EnemyHealth1 : MonoBehaviour
     private Rigidbody2D rb;
     private Collider2D col;
     private EnemyAI2D_CH3 ai;
-    private HealthBarUI healthBar;
+   
 
     public bool IsDead => isDead;
 
@@ -66,6 +66,12 @@ public class EnemyHealth1 : MonoBehaviour
     {
         isDead = true;
 
+        // 🔥 Báo HUD tăng Kill
+        if (StageHUD_CH3.Main != null)
+        {
+            StageHUD_CH3.Main.AddKill();
+        }
+
         // Báo cho LevelManager biết 1 quái đã chết
         LevelManager_CH3 levelManager = FindObjectOfType<LevelManager_CH3>();
         if (levelManager != null)
@@ -73,7 +79,8 @@ public class EnemyHealth1 : MonoBehaviour
             levelManager.EnemyDied();
         }
 
-        if (ai != null) ai.enabled = false;
+        if (ai != null)
+            ai.enabled = false;
 
         if (rb != null)
         {

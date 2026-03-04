@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8495366875983837780}
   - component: {fileID: 8087313686603130785}
   - component: {fileID: 5496514700549007737}
+  - component: {fileID: 6903172807390114597}
   m_Layer: 7
   m_Name: Minotaur_03
   m_TagString: Enemy
@@ -176,9 +177,14 @@ MonoBehaviour:
   player: {fileID: 5568038928621529431}
   moveSpeed: 2.5
   chaseRange: 999
-  stopRange: 2
+  attackRange: 3
   damage: 10
   attackCooldown: 10
+  attackPoint: {fileID: 5568038928621529431}
+  attackRadius: 1.5
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &5496514700549007737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,8 +197,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654fe64dec12ac84aab1f6a57e5ebaed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthBar: {fileID: 0}
   maxHP: 10
   destroyDelay: 0.8
+--- !u!95 &6903172807390114597
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141299704967728568}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 18bf3c0820e72294ead11f00899a5093, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4268488200875786446
 GameObject:
   m_ObjectHideFlags: 0

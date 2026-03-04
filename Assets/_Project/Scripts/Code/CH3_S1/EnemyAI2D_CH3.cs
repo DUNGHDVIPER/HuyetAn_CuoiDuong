@@ -8,20 +8,26 @@ public class EnemyAI2D_CH3 : MonoBehaviour
 
     [Header("Move")]
     public float moveSpeed = 2.5f;
-    public float chaseRange = 999f;
-    public float stopRange = 3.5f;
+    public float chaseRange = 10f;
+    public float attackRange = 3f;
 
     [Header("Attack")]
     public int damage = 10;
-    public float attackCooldown = 10.0f;
+    public float attackCooldown = 5f;
+
+    [Header("Hitbox")]
+    public Transform attackPoint;
+    public float attackRadius = 1.5f;
+    public LayerMask playerLayer;
 
     private Rigidbody2D rb;
     private Animator anim;
 
     private float nextAttackTime = 0f;
     private bool isAttacking = false;
+    private bool hasDealtDamage = false;
+    private bool hasSpeedParam = false;
     private int facing = 1;
-    private bool hasSpeed = false;
 
     void Awake()
     {
@@ -29,7 +35,7 @@ public class EnemyAI2D_CH3 : MonoBehaviour
         anim = GetComponent<Animator>();
 
         if (anim != null)
-            hasSpeed = anim.parameters.Any(p => p.name == "Speed");
+            hasSpeedParam = anim.parameters.Any(p => p.name == "Speed");
     }
 
     void Update()
@@ -37,88 +43,112 @@ public class EnemyAI2D_CH3 : MonoBehaviour
         if (player == null)
         {
             GameObject p = GameObject.FindGameObjectWithTag("Player");
-            if (p != null) player = p.transform;
+            if (p != null)
+                player = p.transform;
         }
 
         if (player == null) return;
 
-        float distX = Mathf.Abs(player.position.x - transform.position.x);
+        float distance = Vector2.Distance(transform.position, player.position);
 
-        // Ngoài vùng đuổi
-        if (distX > chaseRange)
+        if (distance > chaseRange)
         {
             StopMove();
             return;
         }
 
-        // Đang đánh thì đứng yên
         if (isAttacking)
         {
             StopMove();
             return;
         }
 
-        // Đủ gần để đánh
-        if (distX <= stopRange)
+        if (distance <= attackRange)
         {
             StopMove();
 
             if (Time.time >= nextAttackTime)
             {
-                Debug.Log("Enemy -> DoAttack");
-
-                isAttacking = true;
-                nextAttackTime = Time.time + attackCooldown;
-
-                anim.ResetTrigger("DoAttack");
-                anim.SetTrigger("DoAttack");
+                StartAttack();
             }
+
             return;
         }
 
-        // Chưa đủ gần → chạy tới player
+        MoveTowardPlayer();
+    }
+
+    void MoveTowardPlayer()
+    {
         float dir = player.position.x - transform.position.x;
         facing = dir >= 0 ? 1 : -1;
 
-        Vector3 s = transform.localScale;
-        s.x = Mathf.Abs(s.x) * facing;
-        transform.localScale = s;
+        Vector3 scale = transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * facing;
+        transform.localScale = scale;
 
         rb.velocity = new Vector2(facing * moveSpeed, rb.velocity.y);
-        if (hasSpeed) anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+
+        if (hasSpeedParam)
+            anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
     }
 
     void StopMove()
     {
         rb.velocity = new Vector2(0f, rb.velocity.y);
-        if (hasSpeed) anim.SetFloat("Speed", 0f);
+
+        if (hasSpeedParam)
+            anim.SetFloat("Speed", 0f);
     }
 
-    // 🔥 EVENT ĐẶT Ở FRAME CHÉM TRÚNG
+    void StartAttack()
+    {
+        isAttacking = true;
+        hasDealtDamage = false;
+        nextAttackTime = Time.time + attackCooldown;
+
+        anim.ResetTrigger("DoAttack");
+        anim.SetTrigger("DoAttack");
+
+        Debug.Log("Enemy -> DoAttack");
+    }
+
+    // ===== Animation Event =====
+
     public void AE_Attack_Hit()
     {
-        Debug.Log("AE_Attack_Hit CALLED");
+        if (hasDealtDamage) return;
 
-        if (player == null) return;
+        Collider2D hit = Physics2D.OverlapCircle(
+            attackPoint.position,
+            attackRadius,
+            playerLayer
+        );
 
-        float distX = Mathf.Abs(player.position.x - transform.position.x);
-
-        if (distX <= stopRange + 0.5f)
+        if (hit != null)
         {
-            PlayerHealth1 hp = player.GetComponent<PlayerHealth1>();
+            PlayerHealth1_CH3 hp = hit.GetComponent<PlayerHealth1_CH3>();
             if (hp != null)
             {
                 hp.TakeDamage(damage);
-                Debug.Log("Enemy dealt damage to Player");
+                hasDealtDamage = true;
+                Debug.Log("Enemy dealt damage");
             }
         }
     }
 
-    // 🔥 EVENT ĐẶT Ở CUỐI ANIMATION
     public void AE_Attack_End()
     {
-        Debug.Log("AE_Attack_End CALLED");
         isAttacking = false;
         anim.ResetTrigger("DoAttack");
+        Debug.Log("Attack finished");
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (attackPoint == null) return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
 }

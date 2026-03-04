@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 65fd7a34feed4cf40ae540787f5a37be, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -122,7 +122,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.011083603, y: 0}
+  m_Offset: {x: 0.20898938, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -133,7 +133,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.320839, y: 4.9}
+  m_Size: {x: 3.760985, y: 4.9}
   m_EdgeRadius: 0
 --- !u!50 &6788084061754456140
 Rigidbody2D:
@@ -177,9 +177,14 @@ MonoBehaviour:
   player: {fileID: 0}
   moveSpeed: 2.5
   chaseRange: 999
-  stopRange: 2
+  attackRange: 3
   damage: 10
   attackCooldown: 10
+  attackPoint: {fileID: 6908823293739878550}
+  attackRadius: 1.5
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &6760040691983901151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,6 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654fe64dec12ac84aab1f6a57e5ebaed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthBar: {fileID: 0}
   maxHP: 10
   destroyDelay: 0.8
 --- !u!95 &5787656130986981163
@@ -240,7 +246,7 @@ Transform:
   m_GameObject: {fileID: 7489764206443169253}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.29, y: -0.56, z: 0}
+  m_LocalPosition: {x: 2.48, y: -0.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
