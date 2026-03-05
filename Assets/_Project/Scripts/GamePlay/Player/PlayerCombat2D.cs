@@ -85,7 +85,15 @@ public class PlayerCombat2D : MonoBehaviour
 
         HandleComboProgressAndHit();
     }
+    void LateUpdate()
+    {
+        if (!attackPoint || !sr) return;
 
+        Vector3 p = attackPoint.localPosition;
+        float absX = Mathf.Abs(p.x);
+        p.x = sr.flipX ? -absX : absX;
+        attackPoint.localPosition = p;
+    }
     // ---------------------------
     // Normal Attack Combo
     // ---------------------------
@@ -142,29 +150,44 @@ public class PlayerCombat2D : MonoBehaviour
         return st.IsTag("Attack");
     }
 
+    // ---------------------------
+    // Damage + Feedback Helpers (NEW)
+    // ---------------------------
+    void ApplyDamageAndFeedback(Collider2D col, Vector3 refPoint, int damage)
+    {
+        if (col == null) return;
+
+        // hitPoint để feedback dùng (nếu script có)
+        Vector2 hitPoint = col.ClosestPoint(refPoint);
+
+        // 1) Damage (ưu tiên InParent vì collider hay nằm ở child)
+        var hp = col.GetComponentInParent<EnemyHealth>();
+        if (hp != null)
+        {
+            hp.TakeDamage(damage);
+        }
+
+        // 2) Feedback (component riêng, không nằm trong EnemyHealth)
+        var fb = col.GetComponentInParent<EnemyHitFeedback2D>();
+        if (fb != null)
+        {
+            // Nếu script của bạn có method khác tên, báo mình, mình chỉnh đúng theo file.
+            fb.PlayHitFeedback(hitPoint);
+        }
+    }
+
     void DoHit_Normal()
     {
         if (!attackPoint) return;
 
         var hits = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
-        bool didAnyHit = false;
+
+        // Debug nếu cần
+        // Debug.Log($"Normal hits = {hits.Length}");
 
         foreach (var col in hits)
         {
-            didAnyHit = true;
-            Vector2 hitPoint = col.ClosestPoint(attackPoint.position);
-
-            var hp = col.GetComponent<EnemyHealth>();
-            if (hp) hp.TakeDamage(attackDamage);
-
-            var fb = col.GetComponent<EnemyHitFeedback2D>();
-            if (fb) fb.PlayHitFeedback(hitPoint);
-        }
-
-        if (didAnyHit)
-        {
-            var sfx = GetComponent<PlayerCombatSFX>();
-            if (sfx) sfx.PlayHit();
+            ApplyDamageAndFeedback(col, attackPoint.position, attackDamage);
         }
     }
 
@@ -183,9 +206,9 @@ public class PlayerCombat2D : MonoBehaviour
     Vector3 ForwardOffsetPos(float offset)
     {
         int dir = FacingSign();
-        // nổ quanh người => offset = 0
-        return attackPoint ? attackPoint.position + new Vector3(dir * offset, 0f, 0f)
-                           : transform.position + new Vector3(dir * offset, 0f, 0f);
+        return attackPoint
+            ? attackPoint.position + new Vector3(dir * offset, 0f, 0f)
+            : transform.position + new Vector3(dir * offset, 0f, 0f);
     }
 
     void SpawnVfx(GameObject prefab, Vector3 pos, float scale)
@@ -205,13 +228,7 @@ public class PlayerCombat2D : MonoBehaviour
 
         foreach (var col in hits)
         {
-            Vector2 hitPoint = col.ClosestPoint(center);
-
-            var hp = col.GetComponent<EnemyHealth>();
-            if (hp) hp.TakeDamage(lightningDamage);
-
-            var fb = col.GetComponent<EnemyHitFeedback2D>();
-            if (fb) fb.PlayHitFeedback(hitPoint);
+            ApplyDamageAndFeedback(col, center, lightningDamage);
         }
 
         SpawnVfx(lightningVfxPrefab, center, lightningVfxScale);
@@ -227,13 +244,7 @@ public class PlayerCombat2D : MonoBehaviour
 
         foreach (var col in hits)
         {
-            Vector2 hitPoint = col.ClosestPoint(center);
-
-            var hp = col.GetComponent<EnemyHealth>();
-            if (hp) hp.TakeDamage(fireDamage);
-
-            var fb = col.GetComponent<EnemyHitFeedback2D>();
-            if (fb) fb.PlayHitFeedback(hitPoint);
+            ApplyDamageAndFeedback(col, center, fireDamage);
         }
 
         SpawnVfx(fireVfxPrefab, center, fireVfxScale);
@@ -241,7 +252,7 @@ public class PlayerCombat2D : MonoBehaviour
 
     // ---------------------------
     // Animation Events (IMPORTANT)
-    // Đặt event này trên CLIP PLAYER (Anim_SkillQ_Water / Anim_SkillE_Fire)
+    // Đặt event này trên CLIP PLAYER (Anim_SkillQ... / Anim_SkillE...)
     // KHÔNG đặt trên clip VFX
     // ---------------------------
     public void AE_SkillQ_Hit() => DoAOE_Lightning();
@@ -254,20 +265,20 @@ public class PlayerCombat2D : MonoBehaviour
     {
         if (!attackPoint) return;
 
-        // Normal attack range
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
 
-        // Lightning circle
         Gizmos.color = Color.cyan;
-        Vector3 lCenter = Application.isPlaying ? ForwardOffsetPos(lightningForwardOffset)
-                                                : attackPoint.position + new Vector3((sr && sr.flipX ? -1 : 1) * lightningForwardOffset, 0f, 0f);
+        Vector3 lCenter = Application.isPlaying
+            ? ForwardOffsetPos(lightningForwardOffset)
+            : attackPoint.position + new Vector3((sr && sr.flipX ? -1 : 1) * lightningForwardOffset, 0f, 0f);
+        Gizmos.DrawWireSphere(lCenter, lightningRadius);
         Gizmos.DrawWireSphere(lCenter, lightningRadius);
 
-        // Fire box
         Gizmos.color = new Color(1f, 0.5f, 0f, 1f);
-        Vector3 fCenter = Application.isPlaying ? ForwardOffsetPos(fireForwardOffset)
-                                                : attackPoint.position + new Vector3((sr && sr.flipX ? -1 : 1) * fireForwardOffset, 0f, 0f);
+        Vector3 fCenter = Application.isPlaying
+            ? ForwardOffsetPos(fireForwardOffset)
+            : attackPoint.position + new Vector3((sr && sr.flipX ? -1 : 1) * fireForwardOffset, 0f, 0f);
         Gizmos.DrawWireCube(fCenter, fireBoxSize);
     }
 }

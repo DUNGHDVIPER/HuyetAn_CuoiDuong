@@ -3,21 +3,23 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(RawImage))]
 public class UIFogScroll : MonoBehaviour
-
 {
-    public Vector2 speed = new Vector2(0.02f, 0f);
+    public Vector2 speed = new Vector2(0.02f, 0.01f);
+    public bool unscaledTime = true;
 
-    private RawImage rawImage;
-    private Vector2 offset;
+    private RawImage _img;
+    private Rect _uv;
 
     void Awake()
     {
-        rawImage = GetComponent<RawImage>();
+        _img = GetComponent<RawImage>();
+        _uv = _img.uvRect;
     }
 
     void Update()
     {
-        offset += speed * Time.unscaledDeltaTime;
-        rawImage.uvRect = new Rect(offset, Vector2.one);
+        float dt = unscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
+        _uv.position += speed * dt;
+        _img.uvRect = _uv;
     }
 }

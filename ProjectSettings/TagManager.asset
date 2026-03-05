@@ -44,3 +44,18 @@ TagManager:
   - name: VFX
     uniqueID: 3594800047
     locked: 0
+  - name: Background
+    uniqueID: 3718654965
+    locked: 0
+  - name: Midground
+    uniqueID: 245029015
+    locked: 0
+  - name: Foreground
+    uniqueID: 1991089393
+    locked: 0
+  - name: Characters
+    uniqueID: 3948099441
+    locked: 0
+  - name: UIWorld
+    uniqueID: 2545946875
+    locked: 0
